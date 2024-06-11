@@ -180,8 +180,8 @@ float LookupTuple(Node &n, Valuation::Type type) {
 
 float RollOutWithTuple(Node &n, Valuation::Type type) {
   int empty_tiles = n.CountEmptyTiles();
-  float tile2_prob = 1.0 / empty_tiles * 0.9;
-  float tile4_prob = 1.0 / empty_tiles * 0.1;
+  float tile2_prob = 1.0 / empty_tiles * (1.0 - options.tile4_prob);
+  float tile4_prob = 1.0 / empty_tiles * options.tile4_prob;
   float total_prob = 0;
   for (int y = 0; y < N; ++y) {
     for (int x = 0; x < N; ++x) {
@@ -392,7 +392,7 @@ int main(int argc, char* argv[]) {
   char* log_file = nullptr;
   int server_port = 0;
   int c;
-  while ((c = getopt(argc, argv, "d:i:p:s:vIL:O:P:R:S:T")) != -1) {
+  while ((c = getopt(argc, argv, "d:i:p:s:vIL:O:P:R:S:T:4:")) != -1) {
     switch (c) {
       case 'd':
         options.max_depth = atoi(optarg);
@@ -430,6 +430,9 @@ int main(int argc, char* argv[]) {
         break;
       case 'T':
         options.tuple_moves = false;
+        break;
+      case '4':
+        options.tile4_prob = atof(optarg);
         break;
     }
   }

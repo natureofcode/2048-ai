@@ -80,7 +80,7 @@ class Plan {
         board[x][y] = 0;
       }
     }
-    return (tile2_prob * 0.9 + tile4_prob * 0.1) / empty_tiles;
+    return (tile2_prob * (1.0 - options.tile4_prob) + tile4_prob * options.tile4_prob) / empty_tiles;
   }
 
  protected:

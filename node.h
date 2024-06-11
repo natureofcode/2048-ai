@@ -29,6 +29,7 @@ struct Options {
   int max_rank = 0;
   bool tuple_moves = true;
   double save_threshold = 0.1;
+  float tile4_prob = 0.1;
 };
 
 static Options options;
@@ -111,6 +112,11 @@ class Node : public Board {
     return count;
   }
 
+  // https://stackoverflow.com/a/12885404/13260313
+  bool YesOrNo(float probability) {
+    return rand()%100 < (probability * 100);
+  }
+
   bool GenerateRandomTile() {
     int num_empty_tiles = 0;
     int empty_tiles[N * N];
@@ -122,7 +128,7 @@ class Node : public Board {
     int r = rand() % num_empty_tiles;
     rand_x = empty_tiles[r] % N;
     rand_y = empty_tiles[r] / N;
-    board[rand_x][rand_y] = 1 + (rand() % 10 == 0);
+    board[rand_x][rand_y] = 1 + YesOrNo(options.tile4_prob);
     if (board[rand_x][rand_y] == 2) ++num_4_tiles;
     return true;
   }
@@ -184,17 +190,17 @@ class Node : public Board {
     if (!skip_cache && cache.Lookup(compact_board, prob, depth, &score))
       return score;
 
-    float tile2_prob = prob / empty_tiles * 0.9;
-    float tile4_prob = prob / empty_tiles * 0.1;
+    float tile2_prob = prob / empty_tiles * (1.0 - options.tile4_prob);
+    float tile4_prob = prob / empty_tiles * options.tile4_prob;
     int total_score = 0;
     for (int y = 0; y < N; ++y) {
       for (int x = 0; x < N; ++x) {
         if (board[x][y]) continue;
 
         board[x][y] = 1;
-        total_score += 0.9 * TryAllMoves(depth, tile2_prob);
+        total_score += (1.0 - options.tile4_prob) * TryAllMoves(depth, tile2_prob);
         board[x][y] = 2;
-        total_score += 0.1 * TryAllMoves(depth, tile4_prob);
+        total_score += options.tile4_prob * TryAllMoves(depth, tile4_prob);
         board[x][y] = 0;
       }
     }
