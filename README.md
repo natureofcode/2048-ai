@@ -1,3 +1,9 @@
+## This fork
+This fork adds the ability to adjust the probability of spawning tile 4. Use it as follows:
+```
+# Play a random game with the chance of tile 4 spawning set to 20%.
+./2048 -4 0.2
+```
 # 2048 - ai
 
 This is a strong AI for the popular game 2048. It reaches the 65536 tile 3.5%
