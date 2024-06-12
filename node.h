@@ -29,7 +29,7 @@ struct Options {
   int max_rank = 0;
   bool tuple_moves = true;
   double save_threshold = 0.1;
-  float tile4_prob = 0.1;
+  double tile4_prob = 0.1;
 };
 
 static Options options;
@@ -112,9 +112,9 @@ class Node : public Board {
     return count;
   }
 
-  // https://stackoverflow.com/a/12885404/13260313
-  bool YesOrNo(float probability) {
-    return rand()%100 < (probability * 100);
+  // https://stackoverflow.com/a/20309032/13260313
+  bool YesOrNo(double probability) {
+    return rand()/(RAND_MAX+1.0) < probability;
   }
 
   bool GenerateRandomTile() {
