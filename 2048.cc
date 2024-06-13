@@ -392,7 +392,7 @@ int main(int argc, char* argv[]) {
   char* log_file = nullptr;
   int server_port = 0;
   int c;
-  while ((c = getopt(argc, argv, "d:i:p:s:vIL:O:P:R:S:T:4:")) != -1) {
+  while ((c = getopt(argc, argv, "d:i:p:s:vIL:O:P:R:S:T4:")) != -1) {
     switch (c) {
       case 'd':
         options.max_depth = atoi(optarg);
